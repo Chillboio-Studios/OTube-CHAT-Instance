@@ -20,12 +20,13 @@ concurrency:
 jobs:
   base:
     name: Test base image build
-    runs-on: arc-runner-set
+    runs-on: ubuntu-latest
     if: github.event_name == 'pull_request'
     steps:
       # Configure build environment
       - name: Checkout
         uses: actions/checkout@v3
+
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v2
 
@@ -41,13 +42,14 @@ jobs:
           cache-to: type=gha,scope=buildx-base-multi-arch,mode=max
 
   publish:
-    runs-on: arc-runner-set
-    if: github.event_name != 'pull_request'
     name: Publish Docker images
+    runs-on: ubuntu-latest
+    if: github.event_name != 'pull_request'
     steps:
       # Configure build environment
       - name: Checkout
         uses: actions/checkout@v3
+
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v2
 
@@ -75,6 +77,7 @@ jobs:
         with:
           images: |
             ghcr.io/stoatchat/api
+
       - name: Publish
         uses: docker/build-push-action@v4
         with:
@@ -94,6 +97,7 @@ jobs:
         with:
           images: |
             ghcr.io/stoatchat/events
+
       - name: Publish
         uses: docker/build-push-action@v4
         with:
@@ -113,6 +117,7 @@ jobs:
         with:
           images: |
             ghcr.io/stoatchat/file-server
+
       - name: Publish
         uses: docker/build-push-action@v4
         with:
@@ -132,6 +137,7 @@ jobs:
         with:
           images: |
             ghcr.io/stoatchat/proxy
+
       - name: Publish
         uses: docker/build-push-action@v4
         with:
@@ -151,6 +157,7 @@ jobs:
         with:
           images: |
             ghcr.io/stoatchat/gifbox
+
       - name: Publish
         uses: docker/build-push-action@v4
         with:
@@ -170,6 +177,7 @@ jobs:
         with:
           images: |
             ghcr.io/stoatchat/crond
+
       - name: Publish
         uses: docker/build-push-action@v4
         with:
@@ -189,6 +197,7 @@ jobs:
         with:
           images: |
             ghcr.io/stoatchat/pushd
+
       - name: Publish
         uses: docker/build-push-action@v4
         with:
@@ -208,6 +217,7 @@ jobs:
         with:
           images: |
             ghcr.io/stoatchat/voice-ingress
+
       - name: Publish
         uses: docker/build-push-action@v4
         with:
@@ -219,3 +229,4 @@ jobs:
           build-args: |
             BASE_IMAGE=ghcr.io/${{ github.repository_owner }}/base:latest
           labels: ${{ steps.meta-voice-ingress.outputs.labels }}
+
